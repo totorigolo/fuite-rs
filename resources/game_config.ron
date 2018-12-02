@@ -10,25 +10,25 @@
         gravity: [ 0.0, -10.0 ],
         hums: ( list: [
           ( position: [ 0.0, 0.0 ],
-            health: 100.0, is_bad: false, is_sleeping: false,
+            health: 100.0, is_bad: false, action: None,
             mass: ( 1.0 ),
             color: ( r: 0.751, g: 0.91, b: 0.76, a: 1.0 ),
             shape: ( height: 0.40, top: 0.20, base: 0.30, border: 0.1 )
           ),
           ( position: [ 1.0, 0.0 ],
-            health: 100.0, is_bad: false, is_sleeping: true,
+            health: 100.0, is_bad: false, action: Sleeping,
             mass: ( 1.0 ),
             color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
             shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
           ( position: [ -1.2, 6.0 ],
-            health: 100.0, is_bad: true, is_sleeping: false,
+            health: 100.0, is_bad: true, action: GoingRight,
             mass: ( 1.0 ),
             color: ( r: 0.97, g: 0.81, b: 0.76, a: 1.0 ),
             shape: ( height: 0.30, top: 0.23, base: 0.23, border: 0.1 )
           ),
           ( position: [ 0.0, 50.0 ],
-            health: 100.0, is_bad: true, is_sleeping: false,
+            health: 100.0, is_bad: true, action: None,
             mass: ( 1.0 ),
             color: ( r: 1.0, g: 0.2, b: 0.2, a: 1.0 ),
             shape: ( height: 0.30, top: 0.23, base: 0.23, border: 0.1 )

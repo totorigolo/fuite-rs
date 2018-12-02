@@ -197,18 +197,20 @@ fn create_hum(world: &mut World, hum: &HumConfig) {
     );
     let material = create_colour_material(world, hum.color.clone().into());
 
-    world.create_entity()
+    let hum_entity = world.create_entity()
         .with(vec2_to_trans(hum.position))
         .with(hum.mass.clone())
         .with(hum.shape.clone())
         .with(Velocity::default())
-        .with(mesh)
-        .with(material)
-        .with(if !hum.is_bad { Alignment::Good } else { Alignment::Bad})
+        .with(mesh.clone())
+        .with(material.clone())
         .with(Health(hum.health))
-        .with(if hum.is_sleeping { CurrentAction::Sleeping } else { CurrentAction::None })
-        .with(PhysicForce::default())
-        .build();
+        .with(hum.action.clone())
+        .with(PhysicForce::default());
+    let hum_entity = if hum.is_bad {
+        hum_entity.with(Bad)
+    } else { hum_entity };
+    hum_entity.build();
 }
 
 fn create_platform(world: &mut World, platform: &PlatformConfig) {

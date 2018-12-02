@@ -6,6 +6,7 @@ use crate::components::{
     Color,
     Mass,
     AABB,
+    CurrentAction,
 };
 
 
@@ -17,7 +18,7 @@ pub struct HumConfig {
     pub color: Color,
     pub health: f32,
     pub is_bad: bool,
-    pub is_sleeping: bool,
+    pub action: CurrentAction,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -2,7 +2,7 @@ use amethyst::{
     ecs::{
         Component,
         storage::{
-//            BTreeStorage,
+            BTreeStorage,
             VecStorage,
             NullStorage,
         },
@@ -55,10 +55,14 @@ impl Component for Dead {
     type Storage = NullStorage<Self>;
 }
 
-impl Component for Alignment {
-    type Storage = VecStorage<Self>;
+impl Component for Bad {
+    type Storage = NullStorage<Self>;
 }
 
 impl Component for CurrentAction {
     type Storage = VecStorage<Self>;
+}
+
+impl Component for LastSeekActionChange {
+    type Storage = BTreeStorage<Self>;
 }

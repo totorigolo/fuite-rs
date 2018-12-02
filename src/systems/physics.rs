@@ -9,10 +9,7 @@ use amethyst::{
 use log::*;
 
 use crate::{
-    components::{
-        HumShape,
-        physics::*,
-    },
+    components::*,
     resources::LevelResource,
 };
 
@@ -33,6 +30,7 @@ impl<'s> System<'s> for Physics {
         ReadStorage<'s, HumShape>,
         ReadStorage<'s, AABB>,
         WriteStorage<'s, PhysicForce>,
+        ReadStorage<'s, Dead>,
     );
 
     fn setup(&mut self, res: &mut Resources) {
@@ -41,7 +39,7 @@ impl<'s> System<'s> for Physics {
 
     fn run(&mut self, (
         time, level, entities, mut transforms, masses, mut velocities,
-        colliders, hum_shapes, aabbs, mut forces
+        colliders, hum_shapes, aabbs, mut forces, deads
     ): Self::SystemData) {
         let elapsed: f32 = time.delta_seconds();
 
@@ -68,6 +66,13 @@ impl<'s> System<'s> for Physics {
             let acceleration = force / mass.0;
             let delta_position = elapsed * (velocity.0 + elapsed * acceleration / 2.0);
             velocity.0 += elapsed * acceleration;
+
+            // Dead => no collisions
+            if deads.get(entity).is_some() {
+                // no x when dead
+                transform.translate_y(delta_position.y);
+                continue;
+            }
 
             // Vertical update
             // COPY-PASTA, CHANGE BOTH UPDATES!

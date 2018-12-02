@@ -13,6 +13,8 @@ pub enum Message {
 
     // Game
     LevelStarted,
+    DeadGoodBot,
+    DeadBadBot,
 
     // Player input
     MouseLeftClick(Vector3<f32>)
