@@ -5,7 +5,7 @@ use amethyst::{
 
 
 /// Messages sent between systems.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Message {
     // Camera
     CameraMoveX(f32),
