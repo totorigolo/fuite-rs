@@ -10,13 +10,12 @@ use amethyst::{
     },
     ui::{
         UiCreator,
-        UiFinder,
     },
 };
 use log::*;
 
-use crate::states::game::{
-    Game,
+use crate::states::{
+    LevelLoadingState,
     GamePrefabData,
 };
 
@@ -37,8 +36,8 @@ impl<'a, 'b> SimpleState<'a, 'b> for StartingState {
 
         info!("Loading UI...");
         world.exec(|mut creator: UiCreator| {
-            creator.create("ui/fps.ron", &mut self.load_progress);
             creator.create("ui/loading.ron", &mut self.load_progress);
+            creator.create("ui/fps.ron", &mut self.load_progress);
             creator.create("ui/game.ron", &mut self.load_progress);
         });
 
@@ -48,31 +47,24 @@ impl<'a, 'b> SimpleState<'a, 'b> for StartingState {
         }));
     }
 
-    fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans<'a, 'b> {
+    fn update(&mut self, _: &mut StateData<GameData>) -> SimpleTrans<'a, 'b> {
         match &self.load_complete {
             false => {
                 match &self.load_progress.complete() {
-                    Completion::Loading => Trans::None,
-                    Completion::Complete => {
-                        self.load_complete = true;
-                        Trans::None
-                    }
+                    Completion::Loading => {},
+                    Completion::Complete => self.load_complete = true,
                     Completion::Failed => {
-                        error!("Failed to load assets, exiting");
-                        Trans::Quit
+                        error!("Failed to load assets, exiting.");
+                        return Trans::Quit
                     }
-                }
+                };
+                Trans::None
             }
             true => {
                 info!("Loading successful.");
 
-                // Remove the waiting message
-                if let Some(entity) = data.world.exec(|finder: UiFinder| finder.find("loading")) {
-                    data.world.delete_entity(entity).ok();
-                }
-
-                info!("Switching to GameState...");
-                Trans::Switch(Box::new(Game::new(
+                info!("Switching to LevelLoadingState...");
+                Trans::Switch(Box::new(LevelLoadingState::new(
                     self.game_prefab.take()
                         .expect("Game Prefab loading logic error."),
                 )))

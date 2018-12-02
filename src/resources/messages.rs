@@ -8,10 +8,8 @@ pub enum Message {
     CameraMoveX(f32),
     CameraMoveY(f32),
 
-    // Levels
-    ReloadLevels,
-    ReloadLevel,
-    LevelLoaded,
+    // Game
+    LevelStarted,
 }
 
 /// Channel where messages are sent.

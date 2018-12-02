@@ -45,7 +45,7 @@ impl<'s> System<'s> for Text {
         // Process messages in the MessageChannel
         for message in message_channel.read(self.message_reader.as_mut().unwrap()) {
             match message {
-                Message::LevelLoaded => {
+                Message::LevelStarted => {
                     let name = {
                         let idx = level.current_level.expect("current_level is None!");
                         let level = level.levels[idx].clone();

@@ -15,29 +15,37 @@ use amethyst::{
 };
 use log::*;
 
+use crate::{
+    resources::{
+        Message,
+        MessageChannel,
+    }
+};
+
 
 pub type GamePrefabData = BasicScenePrefab<Vec<PosTex>>;
 
-pub struct Game {
+pub struct GameState {
     scene_handle: Handle<Prefab<GamePrefabData>>,
 }
 
-impl Game {
+impl GameState {
     pub fn new(scene_handle: Handle<Prefab<GamePrefabData>>) -> Self {
-        Game { scene_handle }
+        GameState { scene_handle }
     }
 }
 
-impl<'a, 'b> SimpleState<'a, 'b> for Game {
+impl<'a, 'b> SimpleState<'a, 'b> for GameState {
     fn on_start(&mut self, data: StateData<GameData>) {
         info!("Game state starting...");
 
         let world = data.world;
-
-//        hide_cursor(world);
-
         world.create_entity().with(self.scene_handle.clone()).build();
 
+        world.write_resource::<MessageChannel>()
+            .single_write(Message::LevelStarted);
+
+//        hide_cursor(world);
         info!("Game state initialization success!");
     }
 
@@ -47,13 +55,16 @@ impl<'a, 'b> SimpleState<'a, 'b> for Game {
                 if is_close_requested(&event) || is_key_down(&event, VirtualKeyCode::Escape) {
                     info!("Escape pressed, bye!");
                     Trans::Quit
+                } else if is_key_down(&event, VirtualKeyCode::R) {
+                    info!("R pressed, reloading level!");
+                    Trans::Pop
                 } else {
                     Trans::None
                 }
             }
             StateEvent::Ui(ui_event) => {
                 info!(
-                    "[HANDLE_EVENT] You just interacted with a ui element: {:?}",
+                    "[HANDLE_EVENT] You just interacted with a UI element: {:?}",
                     ui_event
                 );
                 Trans::None

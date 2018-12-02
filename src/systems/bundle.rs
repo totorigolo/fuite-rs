@@ -30,7 +30,6 @@ impl<'a, 'b> SystemBundle<'a, 'b> for GameBundle {
         builder.add(HotReloadSystem::new(HotReloadStrategy::every(2)), "", &[]);
 
 
-        builder.add(LevelManager::default(), "level_mgr_system", &[]);
         builder.add(Fps::default(), "fps_system", &[]);
         builder.add(Text::default(), "text_system", &[]);
 

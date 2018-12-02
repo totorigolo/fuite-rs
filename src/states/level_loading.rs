@@ -1,13 +1,27 @@
 use amethyst::{
+    prelude::*,
     ecs::prelude::*,
-    assets::Loader,
+    assets::{
+        Loader,
+        Prefab,
+        Handle,
+    },
+    ui::{
+        UiFinder,
+    },
     core::{
         Transform,
         nalgebra::{
             Vector2, Vector3,
         },
     },
-    renderer::{PosTex, Material, MaterialDefaults, MeshHandle},
+    renderer::{
+        PosTex,
+        Material,
+        MaterialDefaults,
+        MeshHandle,
+        HiddenPropagate,
+    },
 };
 use log::*;
 
@@ -15,148 +29,147 @@ use crate::{
     resources::*,
     components::*,
     config::*,
+    states::*,
 };
 
-///Finds shapes without meshes and creates meshes for them
-#[derive(Default)]
-pub struct LevelManager {
-    level_just_loaded: bool,
-    message_reader: Option<ReaderId<Message>>,
+
+#[derive(Clone)]
+enum LoadingState {
+    NeedToLoadLevels,
+    LevelsLoaded,
+    NeedToLoadLevel,
+    LevelLoaded,
 }
 
-impl<'s> System<'s> for LevelManager {
-    type SystemData = (
-        Read<'s, LazyUpdate>,
-        Read<'s, LevelResource>,
-        Write<'s, MessageChannel>,
-    );
+pub struct LevelLoadingState {
+    // To pass to GameState
+    scene_handle: Handle<Prefab<GamePrefabData>>,
 
-    fn setup(&mut self, res: &mut Resources) {
-        Self::SystemData::setup(res);
-        self.message_reader = Some(res.fetch_mut::<MessageChannel>().register_reader());
+    // Level loading related
+    loading_state: LoadingState,
+}
+
+impl LevelLoadingState {
+    pub fn new(scene_handle: Handle<Prefab<GamePrefabData>>) -> Self {
+        LevelLoadingState {
+            scene_handle,
+            loading_state: LoadingState::NeedToLoadLevels,
+        }
+    }
+}
+
+impl<'a, 'b> SimpleState<'a, 'b> for LevelLoadingState {
+    fn on_resume(&mut self, data: StateData<GameData>) {
+        self.show_loading(data.world);
+        self.unload_level(data.world);
+        self.loading_state = LoadingState::NeedToLoadLevel;
     }
 
-    fn run(&mut self, (updater, levels, mut message_channel): Self::SystemData) {
-        match levels.state.clone() {
-            // The resource has just been created from Default
-            // => load the levels
-            LevelResourceState::JustCreated => {
-                updater.exec_mut(move |world| load_levels(world));
+    fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans<'a, 'b> {
+        match self.loading_state.clone() {
+            LoadingState::NeedToLoadLevels => {
+                self.load_levels(data.world);
+                self.loading_state = LoadingState::LevelsLoaded;
+                Trans::None
             }
-            // The config is loaded, but no level is loaded
-            // => load the first level
-            LevelResourceState::ConfigLoaded | LevelResourceState::ReloadNeeded => {
-                updater.exec_mut(move |world| load_level(world));
-                self.level_just_loaded = true;
+            LoadingState::LevelsLoaded => {
+                self.loading_state = LoadingState::NeedToLoadLevel;
+                Trans::None
             }
-            // The config and a level are loaded
-            LevelResourceState::Loaded => {
-                if self.level_just_loaded.clone() {
-                    let msg = Message::LevelLoaded;
-                    debug!("New message: {:?}", msg);
-                    message_channel.single_write(msg);
-                    self.level_just_loaded = false;
-                }
-
-                // Process messages in the MessageChannel
-                for message in message_channel.read(self.message_reader.as_mut().unwrap()) {
-                    match message {
-                        Message::ReloadLevels => {
-                            updater.exec_mut(move |world| {
-                                unload_level(world);
-                                load_levels(world);
-                            });
-                        }
-                        Message::ReloadLevel => {
-                            updater.exec_mut(move |world| restart_level(world));
-                        }
-                        _ => {}
-                    }
-                }
+            LoadingState::NeedToLoadLevel => {
+                self.load_level(data.world);
+                self.loading_state = LoadingState::LevelLoaded;
+                Trans::None
+            }
+            LoadingState::LevelLoaded => {
+                self.hide_loading(data.world);
+                Trans::Push(Box::new(GameState::new(self.scene_handle.clone())))
             }
         }
     }
 }
 
-fn load_levels(world: &mut World) {
-    info!("Loading levels...");
+impl LevelLoadingState {
+    fn load_levels(&mut self, world: &mut World) {
+        info!("Loading levels...");
 
-    let config = world.read_resource::<LevelsConfig>();
+        let config = world.read_resource::<LevelsConfig>();
 
-    // For the time being, we only need one level
-    assert_eq!(config.levels.len(), 1,
-               "Invalid level data, there are {} levels.", config.levels.len());
-    assert_eq!(config.start_level, 0,
-               "Invalid level data, start_level={}.", config.start_level);
-
-    let mut level_resource = world.write_resource::<LevelResource>();
-    level_resource.current_level = Some(0);
-    level_resource.levels = config.levels.clone();
-    level_resource.state = LevelResourceState::ConfigLoaded;
-
-    info!("Levels loaded!");
-}
-
-fn load_level(world: &mut World) {
-    info!("Loading level...");
-
-    let level = {
-        let resource = world.read_resource::<LevelResource>();
-        let idx = resource.current_level.expect("load_level: current_level is None!");
-        let level = resource.levels[idx].clone();
-        info!("=> #{}: {}", idx, level.name);
-        level
-    };
-
-    for platform in &level.platforms.list {
-        create_platform(world, &platform);
-    }
-    for hum in &level.hums.list {
-        create_hum(world, &hum);
-    }
-
-    let mut level_resource = world.write_resource::<LevelResource>();
-    level_resource.state = LevelResourceState::Loaded;
-    info!("Level loaded!");
-}
-
-fn unload_level(world: &mut World) {
-    info!("Unloading level...");
-
-    let _level = {
-        let resource = world.read_resource::<LevelResource>();
-        if resource.state != LevelResourceState::Loaded {
-            error!("unload_level: no level loaded");
-            return;
+        // Assert that there are at least one level
+        if config.levels.is_empty() {
+            panic!("No level were loaded, the config is corrupted.");
         }
 
-        let idx = resource.current_level.expect("load_level: current_level is None!");
-        let level = resource.levels[idx].clone();
-        info!("=> #{}: {}", idx, level.name);
-        level
-    };
+        let mut level_resource = world.write_resource::<LevelResource>();
+        level_resource.current_level = Some(0);
+        level_resource.levels = config.levels.clone();
 
-    // TODO: Restore the camera to its location
+        info!("Levels loaded.");
+    }
 
-    // Delete all Hums and static shapes
-    {
-        let entities = world.entities();
-        let hums = world.read_storage::<HumShape>();
-        let colliders = world.read_storage::<Collider>();
-        for (e, _) in (&entities, &hums).join() {
-            entities.delete(e).expect("Failed to delete hum.");
+    fn load_level(&mut self, world: &mut World) {
+        info!("Loading level...");
+
+        let level = {
+            let resource = world.read_resource::<LevelResource>();
+            let idx = resource.current_level.expect("load_level: current_level is None!");
+            let level = resource.levels[idx].clone();
+            info!("=> #{}: {}", idx, level.name);
+            level
+        };
+
+        for platform in &level.platforms.list {
+            create_platform(world, &platform);
         }
-        for (e, _) in (&entities, &colliders).join() {
-            entities.delete(e).expect("Failed to delete collider.");
+        for hum in &level.hums.list {
+            create_hum(world, &hum);
+        }
+
+        info!("Level loaded.");
+    }
+
+    fn unload_level(&mut self, world: &mut World) {
+        info!("Unloading level...");
+
+        let _level = {
+            let resource = world.read_resource::<LevelResource>();
+            let idx = resource.current_level.expect("load_level: current_level is None!");
+            let level = resource.levels[idx].clone();
+            info!("=> #{}: {}", idx, level.name);
+            level
+        };
+
+        // TODO: Restore the camera to its location
+
+        // Delete all Hums and static shapes
+        {
+            let entities = world.entities();
+            let hums = world.read_storage::<HumShape>();
+            let colliders = world.read_storage::<Collider>();
+            for (e, _) in (&entities, &hums).join() {
+                entities.delete(e).expect("Failed to delete hum.");
+            }
+            for (e, _) in (&entities, &colliders).join() {
+                entities.delete(e).expect("Failed to delete collider.");
+            }
+        }
+
+        info!("Level unloaded.");
+    }
+
+    fn show_loading(&mut self, world: &mut World) {
+        if let Some(entity) = world.exec(|finder: UiFinder| finder.find("loading")) {
+            world.write_storage::<HiddenPropagate>().remove(entity)
+                .expect("Failed to show the loading text.");
         }
     }
 
-    let mut level_resource = world.write_resource::<LevelResource>();
-    level_resource.state = LevelResourceState::ReloadNeeded;
-}
-
-fn restart_level(world: &mut World) {
-    unload_level(world);
+    fn hide_loading(&mut self, world: &mut World) {
+        if let Some(entity) = world.exec(|finder: UiFinder| finder.find("loading")) {
+            world.write_storage().insert(entity, HiddenPropagate)
+                .expect("Failed to hide the loading text.");
+        }
+    }
 }
 
 fn vec2_to_trans(pos: Vector2<f32>) -> Transform {

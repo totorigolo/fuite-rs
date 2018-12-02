@@ -11,8 +11,8 @@ Text(
     ),
     text: (
         text: "Loading",
-        font_size: 25.,
+        font_size: 60.,
         color: (1., 1., 1., 1.),
-        font: File("font/Gabrielle.ttf", Ttf, ()),
+        font: File("font/square.ttf", Ttf, ()),
     ),
 )
