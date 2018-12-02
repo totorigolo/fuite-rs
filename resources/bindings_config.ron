@@ -1,0 +1,10 @@
+(
+  axes: {
+    "camera_x": Emulated(pos: Key(Q), neg: Key(D)),
+    "camera_y": Emulated(pos: Key(Z), neg: Key(S)),
+  },
+  actions: {
+    "shift": [[Key(LShift)], [Key(RShift)]],
+    "reload": [[Key(R)]],
+  },
+)

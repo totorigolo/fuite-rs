@@ -1,0 +1,28 @@
+#![enable(implicit_some)]
+Container (
+    transform: (
+        id: "container",
+        anchor: Middle,
+        stretch: XY( x_margin: 0., y_margin: 0.),
+    ),
+    children: [
+        Text (
+            transform: (
+                id: "name",
+                anchor: TopMiddle,
+                x: 0.,
+                y: -100.,
+                width: 800.,
+                height: 40.,
+                transparent: true,
+            ),
+            text: (
+                text: "",
+                font_size: 40.,
+                color: (1., 1., 1., 1.),
+                font: File("font/Gabrielle.ttf", Ttf, ()),
+                align: Middle,
+            ),
+        ),
+    ]
+)

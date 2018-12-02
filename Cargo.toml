@@ -1,0 +1,28 @@
+[package]
+name = "fuite"
+version = "0.1.0"
+authors = ["Thomas Lacroix <toto.rigolo@free.fr>"]
+edition = "2018"
+
+keywords = ["ludum-dare"]
+description = """
+A game where you have to escape... but will everybody make it?
+"""
+readme = "README.md"
+repository = "https://github.com/totorigolo/fuite-rs"
+license = "MIT"
+
+[dependencies]
+amethyst = { git = "https://github.com/amethyst/amethyst.git" }
+fern = { version = "0.5", features = ["colored"] }
+log = { version = "0.4", features = ["serde"] }
+serde = "1.0"
+serde_derive = "1.0"
+fnv = "1.0"
+
+[features]
+default = []
+nightly = ["amethyst/nightly"]
+
+[profile.release]
+debug = true
