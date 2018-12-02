@@ -1,7 +1,7 @@
 (
   axes: {
-    "camera_x": Emulated(pos: Key(Q), neg: Key(D)),
-    "camera_y": Emulated(pos: Key(Z), neg: Key(S)),
+    "camera_x": Emulated(pos: Key(D), neg: Key(Q)),
+    "camera_y": Emulated(pos: Key(S), neg: Key(Z)),
   },
   actions: {
     "left_click": [[Mouse(Left)]],

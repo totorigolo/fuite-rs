@@ -36,7 +36,17 @@ impl<'a, 'b> SystemBundle<'a, 'b> for GameBundle {
         builder.add(PlayerInput::default(), "player_input_system", &[]);
         builder.add(CameraMoveSystem::default(), "camera_system", &[]);
 
-        builder.add(Physics::default(), "physics_system", &[]);
+        builder.add(Bots::default(), "bot_system", &[
+        ]);
+        builder.add(BotsRandomHops::default(), "bots_hop_system", &[
+        ]);
+        builder.add(BotsActionExecutor::default(), "bots_ae_system", &[
+        ]);
+
+        builder.add(Physics::default(), "physics_system", &[
+            "bots_hop_system",
+            "bots_ae_system"
+        ]);
 
 //        use log::*;
 //        debug!("{:?}", builder);

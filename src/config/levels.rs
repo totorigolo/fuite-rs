@@ -15,6 +15,9 @@ pub struct HumConfig {
     pub mass: Mass,
     pub shape: HumShape,
     pub color: Color,
+    pub health: f32,
+    pub is_bad: bool,
+    pub is_sleeping: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

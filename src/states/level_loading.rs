@@ -191,26 +191,23 @@ fn create_hum(world: &mut World, hum: &HumConfig) {
     let bottom_left = (-base / 2.0, 0.0);
     let bottom_right = (base / 2.0, 0.0);
 
-//    let border_mesh = create_mesh(
-//        world,
-//        generate_quadrangle_vertices(top_left, top_right, bottom_left, bottom_right),
-//    );
-//    let border_material = create_colour_material(world, [0.0, 0.0, 0.0, 0.0]);
-    let color_mesh = create_mesh(
+    let mesh = create_mesh(
         world,
         generate_quadrangle_vertices(top_left, top_right, bottom_left, bottom_right),
     );
-    let color_material = create_colour_material(world, hum.color.clone().into());
+    let material = create_colour_material(world, hum.color.clone().into());
 
     world.create_entity()
         .with(vec2_to_trans(hum.position))
         .with(hum.mass.clone())
         .with(hum.shape.clone())
         .with(Velocity::default())
-//        .with(border_mesh)
-//        .with(border_material)
-        .with(color_mesh)
-        .with(color_material)
+        .with(mesh)
+        .with(material)
+        .with(if !hum.is_bad { Alignment::Good } else { Alignment::Bad})
+        .with(Health(hum.health))
+        .with(if hum.is_sleeping { CurrentAction::Sleeping } else { CurrentAction::None })
+        .with(PhysicForce::default())
         .build();
 }
 

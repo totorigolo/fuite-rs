@@ -55,12 +55,8 @@ impl Component for Dead {
     type Storage = NullStorage<Self>;
 }
 
-impl Component for GoodBot {
-    type Storage = NullStorage<Self>;
-}
-
-impl Component for BadBot {
-    type Storage = NullStorage<Self>;
+impl Component for Alignment {
+    type Storage = VecStorage<Self>;
 }
 
 impl Component for CurrentAction {
