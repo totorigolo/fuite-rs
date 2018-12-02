@@ -126,9 +126,9 @@ pub struct BotsRandomHops {
 impl Default for BotsRandomHops {
     fn default() -> Self {
         BotsRandomHops {
-            hop_d: Bernoulli::new(0.005),
-            hop_x_d: Uniform::new_inclusive(-6.0, 6.0),
-            hop_y_d: Uniform::new_inclusive(70.0, 90.0),
+            hop_d: Bernoulli::new(0.04),
+            hop_x_d: Uniform::new_inclusive(-9.0, 9.0),
+            hop_y_d: Uniform::new_inclusive(75.0, 90.0),
         }
     }
 }
@@ -147,14 +147,14 @@ impl<'s> System<'s> for BotsRandomHops {
     }
 
     fn run(&mut self, (entities, velocities, actions, mut forces, deads): Self::SystemData) {
-        for (entity, velocity, action, force, _)
+        for (_entity, velocity, action, force, _)
             in (&entities, &velocities, &actions, &mut forces, !&deads).join() {
             if velocity.0.y == 0.0
                 && *action == CurrentAction::None
                 && self.hop_d.sample(&mut rand::thread_rng()) {
                 force.0.x += self.hop_x_d.sample(&mut rand::thread_rng());
                 force.0.y += self.hop_y_d.sample(&mut rand::thread_rng());
-                debug!("Bot #{} just hopped.", entity.id());
+//                debug!("Bot #{} just hopped.", _entity.id());
             }
         }
     }
