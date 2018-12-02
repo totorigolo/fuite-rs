@@ -42,5 +42,41 @@ Container (
                 align: Middle,
             ),
         ),
+        Text (
+            transform: (
+                id: "rocket_passengers",
+                anchor: TopLeft,
+                x: 210.,
+                y: -25.,
+                width: 400.,
+                height: 40.,
+                transparent: true,
+            ),
+            text: (
+                text: "Passengers: N/A",
+                font_size: 20.,
+                color: (1., 1., 1., 1.),
+                font: File("font/square.ttf", Ttf, ()),
+                align: TopLeft,
+            ),
+        ),
+        Text (
+            transform: (
+                id: "rocket_health",
+                anchor: TopLeft,
+                x: 210.,
+                y: -50.,
+                width: 400.,
+                height: 40.,
+                transparent: true,
+            ),
+            text: (
+                text: "Health: N/A",
+                font_size: 20.,
+                color: (1., 1., 1., 1.),
+                font: File("font/square.ttf", Ttf, ()),
+                align: TopLeft,
+            ),
+        ),
     ]
 )

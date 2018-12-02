@@ -31,6 +31,7 @@ impl<'s> System<'s> for Physics {
         ReadStorage<'s, AABB>,
         WriteStorage<'s, PhysicForce>,
         ReadStorage<'s, Dead>,
+        ReadStorage<'s, Rocket>,
     );
 
     fn setup(&mut self, res: &mut Resources) {
@@ -39,7 +40,7 @@ impl<'s> System<'s> for Physics {
 
     fn run(&mut self, (
         time, level, entities, mut transforms, masses, mut velocities,
-        colliders, hum_shapes, aabbs, mut forces, deads
+        colliders, hum_shapes, aabbs, mut forces, deads, rockets
     ): Self::SystemData) {
         let elapsed: f32 = time.delta_seconds();
 
@@ -48,8 +49,8 @@ impl<'s> System<'s> for Physics {
         let gravity = level.gravity;
 
         // Apply forces
-        for (entity, transform, velocity, mass, hum_shape)
-            in (&entities, &mut transforms, &mut velocities, &masses, &hum_shapes).join() {
+        for (entity, transform, velocity, mass, hum_shape, _)
+            in (&entities, &mut transforms, &mut velocities, &masses, &hum_shapes, !&rockets).join() {
 
             // Sum all forces applied to the body
             let mut force = gravity
@@ -83,7 +84,7 @@ impl<'s> System<'s> for Physics {
                 transform.translate_y(vertical_step_delta);
 
                 // Check collisions
-                for (_, static_aabb) in (&colliders, &aabbs).join() {
+                for (_, static_aabb, _) in (&colliders, &aabbs, !&rockets).join() {
                     vertical_collide = true
                         && transform.translation().x + (hum_shape.base / 2.0) > static_aabb.left
                         && transform.translation().x - (hum_shape.base / 2.0) < static_aabb.right
@@ -109,7 +110,7 @@ impl<'s> System<'s> for Physics {
                 transform.translate_x(horizontal_step_delta);
 
                 // Check collisions
-                for (_, static_aabb) in (&colliders, &aabbs).join() {
+                for (_, static_aabb, _) in (&colliders, &aabbs, !&rockets).join() {
                     let vertical_compatible = true
                         && transform.translation().y < static_aabb.top
                         && transform.translation().y + hum_shape.height > static_aabb.bottom;

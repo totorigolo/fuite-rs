@@ -38,11 +38,23 @@ pub struct PlatformsConfig {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RocketConfig {
+    pub position: Vector2<f32>,
+    pub color: Color,
+    pub min_passengers: i32,
+    pub health: f32,
+    pub width: f32,
+    pub height: f32,
+    pub cap: f32,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LevelConfig {
     pub name: String,
     pub gravity: Vector2<f32>,
     pub hums: HumsConfig,
     pub platforms: PlatformsConfig,
+    pub rocket: RocketConfig,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

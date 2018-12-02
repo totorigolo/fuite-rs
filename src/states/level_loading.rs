@@ -101,7 +101,7 @@ impl LevelLoadingState {
         }
 
         let mut level_resource = world.write_resource::<LevelResource>();
-        level_resource.current_level = Some(0);
+        level_resource.current_level = Some(config.start_level);
         level_resource.levels = config.levels.clone();
 
         info!("Levels loaded.");
@@ -121,6 +121,7 @@ impl LevelLoadingState {
         for platform in &level.platforms.list {
             create_platform(world, &platform);
         }
+        create_rocket(world, &level.rocket);
         for hum in &level.hums.list {
             create_hum(world, &hum);
         }
@@ -146,11 +147,15 @@ impl LevelLoadingState {
             let entities = world.entities();
             let hums = world.read_storage::<HumShape>();
             let colliders = world.read_storage::<Collider>();
+            let rockets = world.read_storage::<Rocket>();
             for (e, _) in (&entities, &hums).join() {
                 entities.delete(e).expect("Failed to delete hum.");
             }
             for (e, _) in (&entities, &colliders).join() {
                 entities.delete(e).expect("Failed to delete collider.");
+            }
+            for (e, _) in (&entities, &rockets).join() {
+                entities.delete(e).expect("Failed to delete rocket.");
             }
         }
 
@@ -242,6 +247,46 @@ fn create_platform(world: &mut World, platform: &PlatformConfig) {
         .build();
 }
 
+fn create_rocket(world: &mut World, rocket: &RocketConfig) {
+    debug!("Creating Rocket: {:?}", rocket);
+
+    let width = rocket.width;
+    let height = rocket.height;
+    let x = rocket.position.x;
+    let y = rocket.position.y;
+
+    let aabb = AABB {
+        top: y + height,
+        bottom: y,
+        left: x - width / 2.0,
+        right: x + width / 2.0,
+    };
+
+    let mesh = create_mesh(
+        world,
+        generate_rocket_vertices(
+            aabb.left - x, aabb.bottom - y,
+            aabb.right - x, aabb.top - y,
+            rocket.cap,
+        ),
+    );
+    let material = create_colour_material(world, rocket.color.clone().into());
+
+    let mut transform = Transform::default();
+    transform.set_xyz(x, y, 0.0);
+    trace!("Transform={:?}", transform);
+
+    world.create_entity()
+        .with(transform)
+        .with(aabb.clone())
+        .with(Collider)
+        .with(mesh)
+        .with(material)
+        .with(Health(rocket.health))
+        .with(Rocket::new(rocket.min_passengers, rocket.health, aabb))
+        .build();
+}
+
 /// Generates vertices forming a rectangle.
 /// From the Amethyst appendix_a example
 fn generate_quadrangle_vertices(
@@ -313,6 +358,51 @@ fn generate_rectangle_vertices(left: f32, bottom: f32, right: f32, top: f32) -> 
         PosTex {
             position: Vector3::new(right, bottom, 0.0),
             tex_coord: Vector2::new(0.0, 0.0),
+        },
+    ]
+}
+
+/// Generates vertices forming a Rocket /o/.
+fn generate_rocket_vertices(left: f32, bottom: f32, right: f32, top: f32, cap: f32) -> Vec<PosTex> {
+    vec![
+        // Triangle: |\
+        PosTex {
+            position: Vector3::new(left, bottom, 0.0),
+            tex_coord: Vector2::new(0.0, 0.0),
+        },
+        PosTex {
+            position: Vector3::new(right, bottom, 0.0),
+            tex_coord: Vector2::new(1.0, 0.0),
+        },
+        PosTex {
+            position: Vector3::new(left, top, 0.0),
+            tex_coord: Vector2::new(1.0, 0.8),
+        },
+        // Triangle: \|
+        PosTex {
+            position: Vector3::new(right, top, 0.0),
+            tex_coord: Vector2::new(1.0, 1.0),
+        },
+        PosTex {
+            position: Vector3::new(left, top, 0.0),
+            tex_coord: Vector2::new(0.0, 1.0),
+        },
+        PosTex {
+            position: Vector3::new(right, bottom, 0.0),
+            tex_coord: Vector2::new(0.0, 0.0),
+        },
+        // Triangle: /\
+        PosTex {
+            position: Vector3::new(left, top, 0.0),
+            tex_coord: Vector2::new(0.0, 0.8),
+        },
+        PosTex {
+            position: Vector3::new(right, top, 0.0),
+            tex_coord: Vector2::new(1.0, 0.8),
+        },
+        PosTex {
+            position: Vector3::new((left + right) / 2.0, top + cap, 0.0),
+            tex_coord: Vector2::new(0.5, 1.0),
         },
     ]
 }

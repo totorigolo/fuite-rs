@@ -42,6 +42,8 @@ impl<'a, 'b> SystemBundle<'a, 'b> for GameBundle {
             "bots_bm_system"
         ]);
         builder.add(BotUndertaker::default(), "bots_ut_system", &[]);
+        builder.add(RocketProximityDoorway::default(), "rocket_proximity_system", &[]);
+        builder.add(RocketTakeOffSystem::default(), "rocket_takeoff_system", &[]);
 
         builder.add(Physics::default(), "physics_system", &[
             "bots_hop_system",

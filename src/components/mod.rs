@@ -13,11 +13,13 @@ pub mod color;
 pub mod hum_shape;
 pub mod physics;
 pub mod bots;
+pub mod rocket;
 
 pub use self::color::Color;
 pub use self::hum_shape::HumShape;
 pub use self::physics::*;
 pub use self::bots::*;
+pub use self::rocket::*;
 
 impl Component for Color {
     type Storage = VecStorage<Self>;
@@ -65,4 +67,12 @@ impl Component for CurrentAction {
 
 impl Component for LastSeekActionChange {
     type Storage = BTreeStorage<Self>;
+}
+
+impl Component for Rocket {
+    type Storage = BTreeStorage<Self>;
+}
+
+impl Component for RocketTakeOff {
+    type Storage = NullStorage<Self>;
 }

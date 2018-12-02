@@ -3,6 +3,7 @@ use amethyst::{
     core::{
         Transform,
         timing::Time,
+        nalgebra::Vector3,
     },
 };
 use rand::{
@@ -172,6 +173,7 @@ impl<'s> System<'s> for BotUndertaker {
         WriteStorage<'s, CurrentAction>,
         WriteStorage<'s, Dead>,
         WriteStorage<'s, Bad>,
+        WriteStorage<'s, Rocket>,
         Write<'s, MessageChannel>
     );
 
@@ -179,11 +181,11 @@ impl<'s> System<'s> for BotUndertaker {
         Self::SystemData::setup(res);
     }
 
-    fn run(&mut self, (entities, transforms, mut healths, mut actions, mut deads, bads, mut message_channel): Self::SystemData) {
+    fn run(&mut self, (entities, transforms, mut healths, mut actions, mut deads, bads, rockets, mut message_channel): Self::SystemData) {
 
         // Kill entities with negative health
         let mut deads_entities = vec![];
-        for (entity, health, _) in (&entities, &healths, !&deads).join() {
+        for (entity, health, _, _) in (&entities, &healths, !&deads, !&rockets).join() {
             if health.0 <= 0.0 {
                 deads_entities.push(entity.clone());
             };
@@ -281,6 +283,108 @@ impl<'s> System<'s> for BadBotsMover {
                 }
             } else {
                 *action = CurrentAction::None;
+            }
+        }
+    }
+}
+
+/// Absorbs nearby good bots.
+#[derive(Default)]
+pub struct RocketProximityDoorway;
+
+impl<'s> System<'s> for RocketProximityDoorway {
+    type SystemData = (
+        Entities<'s>,
+        WriteStorage<'s, Rocket>,
+        WriteStorage<'s, RocketTakeOff>,
+        ReadStorage<'s, Transform>,
+        ReadStorage<'s, HumShape>,
+        ReadStorage<'s, Bad>,
+        ReadStorage<'s, Dead>,
+        Write<'s, MessageChannel>
+    );
+
+    fn setup(&mut self, res: &mut Resources) {
+        Self::SystemData::setup(res);
+    }
+
+    fn run(&mut self, (entities, mut rockets, mut take_offs, transforms, hum_shapes, bads, deads, mut message_channel): Self::SystemData) {
+        // Fill (all the) Rocket(s)
+        for (rocket_entity, rocket) in (&entities, &mut rockets).join() {
+            let rocket_aabb: AABB = rocket.aabb.clone();
+
+            if rocket.health <= 0.0 {
+                let msg = Message::RocketDestroyed;
+                debug!("New message: {:?}", msg);
+                message_channel.single_write(msg);
+
+                continue;
+            }
+
+            for (entity, transform, hum_shape, _, _) in (&entities, &transforms, &hum_shapes, !&bads, !&deads).join() {
+                let hum_shape: HumShape = hum_shape.clone();
+                let hum_width = hum_shape.base.max(hum_shape.top);
+                let hum_position: Vector3<f32> = *transform.translation();
+                let is_in = true
+                    && hum_position.x + hum_width / 2.0 > rocket_aabb.left
+                    && hum_position.x - hum_width / 2.0 < rocket_aabb.right
+                    && hum_position.y + hum_shape.height > rocket_aabb.bottom
+                    && hum_position.y < rocket_aabb.top;
+
+                if is_in {
+                    info!("New Hum in the Rocket!");
+
+                    entities.delete(entity)
+                        .expect("Failed to remove an Entity in the Rocket.");
+
+                    rocket.passengers += 1;
+
+                    let msg = Message::NewBotInRocket(rocket.passengers.clone(), rocket.min_passengers);
+                    debug!("New message: {:?}", msg);
+                    message_channel.single_write(msg);
+
+                    if rocket.passengers >= rocket.min_passengers {
+                        take_offs.insert(rocket_entity, RocketTakeOff)
+                            .expect("Failed to add the RocketTakeOff component.");
+
+                        let msg = Message::RocketFullEnough(rocket.passengers.clone(), rocket.min_passengers);
+                        debug!("New message: {:?}", msg);
+                        message_channel.single_write(msg);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// Vertical booster during take off.
+#[derive(Default)]
+pub struct RocketTakeOffSystem;
+
+impl<'s> System<'s> for RocketTakeOffSystem {
+    type SystemData = (
+        Read<'s, Time>,
+        WriteStorage<'s, Transform>,
+        ReadStorage<'s, Rocket>,
+        ReadStorage<'s, RocketTakeOff>,
+        Write<'s, MessageChannel>
+    );
+
+    fn setup(&mut self, res: &mut Resources) {
+        Self::SystemData::setup(res);
+    }
+
+    fn run(&mut self, (time, mut transforms, rockets, take_offs, mut message_channel): Self::SystemData) {
+        let elapsed = time.delta_seconds();
+
+        for (transform, _, _) in (&mut transforms, &rockets, &take_offs).join() {
+            transform.translate_y(1.0 * elapsed);
+
+            if transform.translation().y > 4.0 { // 4 secondes
+                let msg = Message::NextLevel;
+                debug!("New message: {:?}", msg);
+                message_channel.single_write(msg);
+
             }
         }
     }
