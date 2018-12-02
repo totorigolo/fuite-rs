@@ -3,7 +3,7 @@ Prefab (
   entities: [
     ( data: (
         transform: Transform (
-          translation: ( 0.0, 2.0, 300.0 ),
+          translation: ( 0.0, 2.0, 10.0 ),
           rotation: ( 1.0, 0.0, 0.0, 0.0 ),
         ),
         camera: Orthographic((

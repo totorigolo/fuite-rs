@@ -1,4 +1,7 @@
-use amethyst::shrev::EventChannel;
+use amethyst::{
+    core::nalgebra::Vector3,
+    shrev::EventChannel
+};
 
 
 /// Messages sent between systems.
@@ -10,6 +13,9 @@ pub enum Message {
 
     // Game
     LevelStarted,
+
+    // Player input
+    MouseLeftClick(Vector3<f32>)
 }
 
 /// Channel where messages are sent.

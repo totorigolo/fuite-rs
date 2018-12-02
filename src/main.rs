@@ -47,11 +47,11 @@ fn main() -> amethyst::Result<()> {
         .with_bindings_from_file(bindings_config_path)?;
 
     let game_data = GameDataBuilder::default()
-        .with_bundle(GameBundle)?
         .with_bundle(TransformBundle::new())?
-        .with_bundle(FPSCounterBundle::default())?
         .with_bundle(UiBundle::<String, String>::new())?
+        .with_bundle(FPSCounterBundle::default())?
         .with_bundle(input_bundle)?
+        .with_bundle(GameBundle)?
         .with_bundle(RenderBundle::new(rendering_pipeline, Some(display_config)))?;
 
     Application::build(assets_path, StartingState::default())?

@@ -3,8 +3,8 @@ use amethyst::{
     ecs::DispatcherBuilder,
     assets::{
         PrefabLoaderSystem,
-        HotReloadStrategy,
-        HotReloadSystem,
+//        HotReloadStrategy,
+//        HotReloadSystem,
     },
 };
 
@@ -27,7 +27,7 @@ impl<'a, 'b> SystemBundle<'a, 'b> for GameBundle {
 
         builder.add(PrefabLoaderSystem::<GamePrefabData>::default(), "", &[]);
 
-        builder.add(HotReloadSystem::new(HotReloadStrategy::every(2)), "", &[]);
+//        builder.add(HotReloadSystem::new(HotReloadStrategy::every(2)), "", &[]);
 
 
         builder.add(Fps::default(), "fps_system", &[]);

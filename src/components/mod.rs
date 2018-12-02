@@ -2,7 +2,7 @@ use amethyst::{
     ecs::{
         Component,
         storage::{
-            BTreeStorage,
+//            BTreeStorage,
             VecStorage,
             NullStorage,
         },
@@ -12,23 +12,19 @@ use amethyst::{
 pub mod color;
 pub mod hum_shape;
 pub mod physics;
+pub mod bots;
 
 pub use self::color::Color;
 pub use self::hum_shape::HumShape;
-pub use self::physics::{
-    Mass,
-    Velocity,
-    AABB,
-    Collider,
-    PhysicForce,
-};
+pub use self::physics::*;
+pub use self::bots::*;
 
 impl Component for Color {
-    type Storage = BTreeStorage<Self>;
+    type Storage = VecStorage<Self>;
 }
 
 impl Component for HumShape {
-    type Storage = BTreeStorage<Self>;
+    type Storage = VecStorage<Self>;
 }
 
 impl Component for Mass {
@@ -48,5 +44,25 @@ impl Component for Collider {
 }
 
 impl Component for PhysicForce {
+    type Storage = VecStorage<Self>;
+}
+
+impl Component for Health {
+    type Storage = VecStorage<Self>;
+}
+
+impl Component for Dead {
+    type Storage = NullStorage<Self>;
+}
+
+impl Component for GoodBot {
+    type Storage = NullStorage<Self>;
+}
+
+impl Component for BadBot {
+    type Storage = NullStorage<Self>;
+}
+
+impl Component for CurrentAction {
     type Storage = VecStorage<Self>;
 }

@@ -14,9 +14,11 @@ use amethyst::{
 };
 use log::*;
 
-use crate::states::{
-    LevelLoadingState,
-    GamePrefabData,
+use crate::{
+    states::{
+        LevelLoadingState,
+        GamePrefabData,
+    },
 };
 
 

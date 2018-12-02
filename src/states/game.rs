@@ -19,7 +19,7 @@ use crate::{
     resources::{
         Message,
         MessageChannel,
-    }
+    },
 };
 
 
