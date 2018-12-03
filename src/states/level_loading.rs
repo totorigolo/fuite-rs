@@ -118,14 +118,14 @@ impl LevelLoadingState {
     fn load_level(&mut self, world: &mut World) {
         info!("Loading level...");
 
-        let level = {
+        let (idx, level) = {
             let resource = world.read_resource::<LevelResource>();
             let mut idx = resource.current_level.expect("load_level: current_level is None!");
             if resource.finished { idx += 1 }
             idx %= resource.levels.len();
             let level = resource.levels[idx].clone();
             info!("=> #{}: {}", idx, level.name);
-            level
+            (idx, level)
         };
 
         for platform in &level.platforms.list {
@@ -137,8 +137,12 @@ impl LevelLoadingState {
         }
 
         world.write_resource::<LevelResource>().finished = false;
+        world.write_resource::<LevelResource>().current_level = Some(idx);
 
         info!("Level loaded.");
+        info!(" => {}", idx);
+        info!(" => {}", world.read_resource::<LevelResource>().levels[idx].name);
+        info!(" => {}", world.read_resource::<LevelResource>().levels[idx].comment);
     }
 
     fn unload_level(&mut self, world: &mut World) {

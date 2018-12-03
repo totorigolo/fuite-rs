@@ -51,6 +51,8 @@ pub struct RocketConfig {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LevelConfig {
     pub name: String,
+    pub comment: String,
+    pub take_off: String,
     pub gravity: Vector2<f32>,
     pub hums: HumsConfig,
     pub platforms: PlatformsConfig,

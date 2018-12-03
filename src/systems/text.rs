@@ -71,13 +71,15 @@ impl<'s> System<'s> for Text {
         for message in message_channel.read(self.message_reader.as_mut().unwrap()) {
             match message {
                 Message::LevelStarted => {
-                    let name = {
+                    let (name, comment) = {
                         let idx = level.current_level.expect("current_level is None!");
                         let level = level.levels[idx].clone();
-                        level.name
+                        (level.name, level.comment)
                     };
                     info!("Changing level name to: {}.", name);
                     self.write_name(&mut ui_text, name);
+                    info!("Changing level comment to: {}.", comment);
+                    self.write_comment(&mut ui_text, comment);
                 }
                 Message::DeadGoodBot | Message::DeadBadBot => {
                     let name = if *message == Message::DeadGoodBot {"A nice Hum"} else { "A bad Hum" };
@@ -91,7 +93,13 @@ impl<'s> System<'s> for Text {
                                                  format!("Passengers: {}/{}", passengers, min_capacity));
                 }
                 Message::RocketFullEnough(passengers, min_capacity) => {
-                    self.write_comment(&mut ui_text, "The Rocket is ready for take off!".into());
+                    let message = {
+                        let idx = level.current_level.expect("current_level is None!");
+                        let level = level.levels[idx].clone();
+                        level.take_off
+                    };
+
+                    self.write_comment(&mut ui_text, message);
                     self.write_rocket_passengers(&mut ui_text,
                                                  format!("Passengers: {}/{}", passengers, min_capacity));
                 }

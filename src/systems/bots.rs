@@ -311,8 +311,9 @@ impl<'s> System<'s> for RocketProximityDoorway {
 
     fn run(&mut self, (entities, mut rockets, mut take_offs, transforms, hum_shapes, bads, deads, mut message_channel): Self::SystemData) {
         // Fill (all the) Rocket(s)
-        for (rocket_entity, rocket) in (&entities, &mut rockets).join() {
+        for (rocket_entity, rocket_transform, rocket) in (&entities, &transforms, &mut rockets).join() {
             let rocket_aabb: AABB = rocket.aabb.clone();
+            let rocket_position = rocket_transform.translation();
 
             if rocket.health <= 0.0 {
                 let msg = Message::RocketDestroyed;
@@ -329,8 +330,8 @@ impl<'s> System<'s> for RocketProximityDoorway {
                 let is_in = true
                     && hum_position.x + hum_width / 2.0 > rocket_aabb.left
                     && hum_position.x - hum_width / 2.0 < rocket_aabb.right
-                    && hum_position.y + hum_shape.height > rocket_aabb.bottom
-                    && hum_position.y < rocket_aabb.top;
+                    && hum_position.y + hum_shape.height > rocket_position.y
+                    && hum_position.y < rocket_position.y + rocket_aabb.top;
 
                 if is_in {
                     info!("New Hum in the Rocket!");

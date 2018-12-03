@@ -3,18 +3,47 @@
   void_color: ( r: 0.1, g: 0.4, b: 0.9, a: 1.0 ),
   // pixels_per_meter: 200,
   levels: (
-    start_level: 1,
+    start_level: 0,
     levels: [
-      ( // Level 0
-        name: "Hello, first level <3",
+      ( // Level 1
+        name: "Oh, a Rocket?",
+        comment: "",
+        take_off: "Take off!",
+        gravity: [ 0.0, -10.0 ],
         rocket: (
-          position: [ 200.0, 0.0 ],
+          position: [ 2.0, 0.0 ],
           color: ( r: 0.67, g: 0.91, b: 0.87, a: 1.0 ),
-          min_passengers: 10,
+          min_passengers: 1,
           health: 300,
           width: 1.0, height: 4.0, cap: 0.4
         ),
+        hums: ( list: [
+          ( position: [ -4.0, 0.0 ],
+            health: 100.0, is_bad: false, action: GoingRight,
+            mass: ( 1.0 ),
+            color: ( r: 0.751, g: 0.91, b: 0.76, a: 1.0 ),
+            shape: ( height: 0.40, top: 0.20, base: 0.30, border: 0.1 )
+          ),
+        ]),
+        platforms: ( list: [
+          ( aabb: ( top: 0.0, bottom: -1000, left: -20.0, right: 20.0 ),
+            color: ( r: 0.8, g: 0.2, b: 0.1, a: 1.0 ),
+          ),
+        ]),
+      ), // End of Level 1
+
+      ( // Level 2
+        name: "Use your mouse",
+        comment: "Or R to restart",
+        take_off: "Some Hums can miss the rocket!",
         gravity: [ 0.0, -10.0 ],
+        rocket: (
+          position: [ 4.0, 0.0 ],
+          color: ( r: 0.67, g: 0.91, b: 0.87, a: 1.0 ),
+          min_passengers: 3,
+          health: 300,
+          width: 1.0, height: 4.0, cap: 0.4
+        ),
         hums: ( list: [
           ( position: [ 0.0, 0.0 ],
             health: 100.0, is_bad: false, action: None,
@@ -23,72 +52,105 @@
             shape: ( height: 0.40, top: 0.20, base: 0.30, border: 0.1 )
           ),
           ( position: [ 1.0, 0.0 ],
-            health: 100.0, is_bad: false, action: None, //Sleeping,
+            health: 100.0, is_bad: false, action: None,
             mass: ( 1.0 ),
             color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
             shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
-          ( position: [ -1.2, 6.0 ],
-            health: 100.0, is_bad: true, action: GoingRight,
+          ( position: [ -1.4, 0.0 ],
+            health: 100.0, is_bad: false, action: None,
             mass: ( 1.0 ),
-            color: ( r: 0.97, g: 0.81, b: 0.76, a: 1.0 ),
-            shape: ( height: 0.30, top: 0.23, base: 0.23, border: 0.1 )
+            color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
+            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
-          ( position: [ 0.0, 50.0 ],
-            health: 100.0, is_bad: true, action: None,
+          ( position: [ -2.4, 0.0 ],
+            health: 100.0, is_bad: false, action: None,
             mass: ( 1.0 ),
-            color: ( r: 1.0, g: 0.2, b: 0.2, a: 1.0 ),
-            shape: ( height: 0.30, top: 0.23, base: 0.23, border: 0.1 )
+            color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
+            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
         ]),
         platforms: ( list: [
           ( aabb: ( top: 0.0, bottom: -1000, left: -20.0, right: 20.0 ),
             color: ( r: 0.8, g: 0.2, b: 0.1, a: 1.0 ),
           ),
-          ( aabb: ( top: 1.5, bottom: 1.4, left: -2.0, right: 0.0 ),
-            color: ( r: 1.0, g: 0.0, b: 0.0, a: 1.0 ),
-          ),
-          ( aabb: ( top: 2.5, bottom: 2.45, left: -0.4, right: 2.9 ),
-            color: ( r: 0.0, g: 1.0, b: 0.0, a: 1.0 ),
-          ),
-          ( aabb: ( top: 3.5, bottom: 0.0, left: -5.4, right: -5.35 ),
-            color: ( r: 0.1, g: 0.2, b: 0.9, a: 1.0 ),
-          ),
-          ( aabb: ( top: 3.5, bottom: 0.0, left: 5.4, right: 5.45 ),
-            color: ( r: 0.1, g: 0.2, b: 0.9, a: 1.0 ),
-          ),
         ]),
-      ),
-      ( // Level 1
-        name: "Oh, a Rocket?",
+      ), // End of Level 2
+
+      //( // Level 2
+      //  name: "Hello, first level <3",
+      //  rocket: (
+      //    position: [ 200.0, 0.0 ],
+      //    color: ( r: 0.67, g: 0.91, b: 0.87, a: 1.0 ),
+      //    min_passengers: 10,
+      //    health: 300,
+      //    width: 1.0, height: 4.0, cap: 0.4
+      //  ),
+      //  gravity: [ 0.0, -10.0 ],
+      //  hums: ( list: [
+      //    ( position: [ 0.0, 0.0 ],
+      //      health: 100.0, is_bad: false, action: None,
+      //      mass: ( 1.0 ),
+      //      color: ( r: 0.751, g: 0.91, b: 0.76, a: 1.0 ),
+      //      shape: ( height: 0.40, top: 0.20, base: 0.30, border: 0.1 )
+      //    ),
+      //    ( position: [ 1.0, 0.0 ],
+      //      health: 100.0, is_bad: false, action: None, //Sleeping,
+      //      mass: ( 1.0 ),
+      //      color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
+      //      shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
+      //    ),
+      //    ( position: [ -1.2, 6.0 ],
+      //      health: 100.0, is_bad: true, action: GoingRight,
+      //      mass: ( 1.0 ),
+      //      color: ( r: 0.97, g: 0.81, b: 0.76, a: 1.0 ),
+      //      shape: ( height: 0.30, top: 0.23, base: 0.23, border: 0.1 )
+      //    ),
+      //    ( position: [ 0.0, 50.0 ],
+      //      health: 100.0, is_bad: true, action: None,
+      //      mass: ( 1.0 ),
+      //      color: ( r: 1.0, g: 0.2, b: 0.2, a: 1.0 ),
+      //      shape: ( height: 0.30, top: 0.23, base: 0.23, border: 0.1 )
+      //    ),
+      //  ]),
+      //  platforms: ( list: [
+      //    ( aabb: ( top: 0.0, bottom: -1000, left: -20.0, right: 20.0 ),
+      //      color: ( r: 0.8, g: 0.2, b: 0.1, a: 1.0 ),
+      //    ),
+      //    ( aabb: ( top: 1.5, bottom: 1.4, left: -2.0, right: 0.0 ),
+      //      color: ( r: 1.0, g: 0.0, b: 0.0, a: 1.0 ),
+      //    ),
+      //    ( aabb: ( top: 2.5, bottom: 2.45, left: -0.4, right: 2.9 ),
+      //      color: ( r: 0.0, g: 1.0, b: 0.0, a: 1.0 ),
+      //    ),
+      //    ( aabb: ( top: 3.5, bottom: 0.0, left: -5.4, right: -5.35 ),
+      //      color: ( r: 0.1, g: 0.2, b: 0.9, a: 1.0 ),
+      //    ),
+      //    ( aabb: ( top: 3.5, bottom: 0.0, left: 5.4, right: 5.45 ),
+      //      color: ( r: 0.1, g: 0.2, b: 0.9, a: 1.0 ),
+      //    ),
+      //  ]),
+      //), // Level 2
+
+      ( // Level The End
+        name: "The End",
+        comment: "Sorry, no time :)",
+        take_off: "",
         gravity: [ 0.0, -10.0 ],
         rocket: (
-          position: [ 2.0, 0.0 ],
+          position: [ 4.0, 0.0 ],
           color: ( r: 0.67, g: 0.91, b: 0.87, a: 1.0 ),
-          min_passengers: 2,
+          min_passengers: 3,
           health: 300,
           width: 1.0, height: 4.0, cap: 0.4
         ),
-        hums: ( list: [
-          ( position: [ 0.0, 0.0 ],
-            health: 100.0, is_bad: false, action: GoingRight,
-            mass: ( 1.0 ),
-            color: ( r: 0.751, g: 0.91, b: 0.76, a: 1.0 ),
-            shape: ( height: 0.40, top: 0.20, base: 0.30, border: 0.1 )
-          ),
-          ( position: [ 1.0, 0.0 ],
-            health: 100.0, is_bad: false, action: GoingRight,
-            mass: ( 1.0 ),
-            color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
-            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
-          ),
-        ]),
+        hums: ( list: [] ),
         platforms: ( list: [
           ( aabb: ( top: 0.0, bottom: -1000, left: -20.0, right: 20.0 ),
             color: ( r: 0.8, g: 0.2, b: 0.1, a: 1.0 ),
           ),
         ]),
-      )
+      ), // End of Level The End
     ]
   )
 )
