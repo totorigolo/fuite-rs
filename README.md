@@ -6,6 +6,8 @@ A game where you have to escape... but will everybody make it?
 Sacrifices must be made.
 
 
+*EDIT: Ah, no sound... Sorry :/*
+
 *I didn't spent much time on the README yet...*
 
 ## Screenshots
