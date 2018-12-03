@@ -59,26 +59,24 @@ impl<'s> System<'s> for PlayerInput {
             // Pressed
             if !was_down && is_down {
                 if let Some(msg) = match action.as_ref() {
-                    "left_click" => {
+                    "left_click" | "right_click" => {
                         if let Some(position) = inputs.mouse_position() {
                             if let Some((t, c, _)) = camera_transform {
-                                Some(Message::MouseLeftClick(self.screen_to_2d_scene(
+                                let position = self.screen_to_2d_scene(
                                     position, t, c,
-                                    &*screen_dim)))
+                                    &*screen_dim);
+
+                                if action.as_ref() == "left_click".to_string() {
+                                    Some(Message::MouseLeftClick(position))
+                                } else {
+                                    Some(Message::MouseRightClick(position))
+                                }
                             } else {
-                                warn!("Left mouse click ignored because no camera found.");
+                                warn!("Mouse click ignored because no camera found.");
                                 None
                             }
                         } else { None }
                     },
-//                    "shift" => None,
-////                    "reload" => {
-////                        if self.currently_pressed.contains("shift") {
-////                            Some(Message::ReloadLevels)
-////                        } else {
-////                            Some(Message::ReloadLevel)
-////                        }
-////                    },
                     unknown => {
                         debug!("Unhandled input action: {:?}", unknown);
                         None

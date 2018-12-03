@@ -21,7 +21,8 @@ pub enum Message {
     RocketDestroyed,
 
     // Player input
-    MouseLeftClick(Vector3<f32>)
+    MouseLeftClick(Vector3<f32>),
+    MouseRightClick(Vector3<f32>),
 }
 
 /// Channel where messages are sent.

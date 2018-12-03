@@ -5,6 +5,7 @@
   },
   actions: {
     "left_click": [[Mouse(Left)]],
+    "right_click": [[Mouse(Right)]],
     //"shift": [[Key(LShift)], [Key(RShift)]],
     //"reload": [[Key(R)]],
   },

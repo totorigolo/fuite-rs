@@ -388,3 +388,73 @@ impl<'s> System<'s> for RocketTakeOffSystem {
         }
     }
 }
+
+/// Action modifier with the mouse.
+pub struct BotMouseAction {
+    message_reader: Option<ReaderId<Message>>,
+}
+
+impl Default for BotMouseAction {
+    fn default() -> Self {
+        BotMouseAction {
+            message_reader: None
+        }
+    }
+}
+
+impl<'s> System<'s> for BotMouseAction {
+    type SystemData = (
+        Read<'s, MessageChannel>,
+        ReadStorage<'s, Transform>,
+        ReadStorage<'s, HumShape>,
+        WriteStorage<'s, CurrentAction>,
+    );
+
+    fn setup(&mut self, res: &mut Resources) {
+        Self::SystemData::setup(res);
+        self.message_reader = Some(res.fetch_mut::<MessageChannel>().register_reader());
+    }
+
+    fn run(&mut self, (message_channel, transforms, hum_shapes, mut actions): Self::SystemData) {
+        // Process messages in the MessageChannel
+        for message in message_channel.read(self.message_reader.as_mut().unwrap()) {
+            if let Message::MouseLeftClick(click_position) = message {
+
+                // For the first bot under the mouse click event
+                for (transform, shape, action) in (&transforms, &hum_shapes, &mut actions).join() {
+                    let position = transform.translation();
+                    let hum_width = shape.base.max(shape.top);
+
+                    let collide = true
+                        && click_position.x > position.x - hum_width
+                        && click_position.x < position.x + hum_width
+                        && click_position.y < position.y + shape.height
+                        && click_position.y > position.y;
+
+                    if collide {
+                        *action = CurrentAction::GoingLeft;
+                    }
+                }
+            }
+            // OMG copy-pasta
+            if let Message::MouseRightClick(click_position) = message {
+
+                // For the first bot under the mouse click event
+                for (transform, shape, action) in (&transforms, &hum_shapes, &mut actions).join() {
+                    let position = transform.translation();
+                    let hum_width = shape.base.max(shape.top);
+
+                    let collide = true
+                        && click_position.x > position.x - hum_width
+                        && click_position.x < position.x + hum_width
+                        && click_position.y < position.y + shape.height
+                        && click_position.y > position.y;
+
+                    if collide {
+                        *action = CurrentAction::GoingRight;
+                    }
+                }
+            }
+        }
+    }
+}

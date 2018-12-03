@@ -36,6 +36,10 @@ impl<'a, 'b> SystemBundle<'a, 'b> for GameBundle {
         builder.add(PlayerInput::default(), "player_input_system", &[]);
         builder.add(CameraMoveSystem::default(), "camera_system", &[]);
 
+        builder.add(BotMouseAction::default(), "bots_mouse_system", &[
+            "player_input_system"
+        ]);
+
         builder.add(BotsRandomHops::default(), "bots_hop_system", &[]);
         builder.add(BadBotsMover::default(), "bots_bm_system", &[]);
         builder.add(BotsActionExecutor::default(), "bots_ae_system", &[
