@@ -102,7 +102,7 @@ impl<'s> System<'s> for BotsActionExecutor {
                         other_force.0.x += self.kick_x_d.sample(&mut rand::thread_rng());
                         other_force.0.y += self.kick_y_d.sample(&mut rand::thread_rng());
 
-                        debug!("{} => {} ;; health={}", entity.id(), other_entity.id(), other_health.0);
+//                        debug!("{} => {} ;; health={}", entity.id(), other_entity.id(), other_health.0);
 
                         attacked = true;
                         break; // One at a time
@@ -227,6 +227,7 @@ impl<'s> System<'s> for BadBotsMover {
         ReadStorage<'s, Bad>,
         ReadStorage<'s, Dead>,
         ReadStorage<'s, Health>,
+        ReadStorage<'s, Rocket>,
         WriteStorage<'s, LastSeekActionChange>,
     );
 
@@ -235,7 +236,7 @@ impl<'s> System<'s> for BadBotsMover {
     }
 
     // Only for bad bots
-    fn run(&mut self, (entities, time, transforms, mut actions, bads, deads, healths, mut last_seek_changes): Self::SystemData) {
+    fn run(&mut self, (entities, time, transforms, mut actions, bads, deads, healths, rockets, mut last_seek_changes): Self::SystemData) {
         let now = time.absolute_real_time_seconds();
 
         for (entity, transform, action, _, _) in (&entities, &transforms, &mut actions, &bads, !&deads).join() {
@@ -244,7 +245,7 @@ impl<'s> System<'s> for BadBotsMover {
             // For every enemy entities
             let mut nearest_enemy_entity_and_position = None;
             let mut shortest_dist = 100_000_000_000.0;
-            for (other_entity, other_transform, _) in (&entities, &transforms, &healths).join() {
+            for (other_entity, other_transform, _, _) in (&entities, &transforms, &healths, !&rockets).join() {
                 let enemy = entity != other_entity
                     && bads.get(entity).is_some() != bads.get(other_entity).is_some();
                 let other_position = other_transform.translation();
@@ -262,7 +263,7 @@ impl<'s> System<'s> for BadBotsMover {
                 // If attack, always possible
                 let dist = (other_pos - position).norm();
                 if dist < ATTACKING_MIN_DIST {
-                    debug!("Enemy is close, attacking!");
+//                    debug!("Enemy is close, attacking!");
                     *action = CurrentAction::Attacking;
                 } else {
 
@@ -367,24 +368,22 @@ impl<'s> System<'s> for RocketTakeOffSystem {
         WriteStorage<'s, Transform>,
         ReadStorage<'s, Rocket>,
         ReadStorage<'s, RocketTakeOff>,
-        Write<'s, MessageChannel>
+        Write<'s, LevelResource>,
     );
 
     fn setup(&mut self, res: &mut Resources) {
         Self::SystemData::setup(res);
     }
 
-    fn run(&mut self, (time, mut transforms, rockets, take_offs, mut message_channel): Self::SystemData) {
+    fn run(&mut self, (time, mut transforms, rockets, take_offs, mut level): Self::SystemData) {
         let elapsed = time.delta_seconds();
 
         for (transform, _, _) in (&mut transforms, &rockets, &take_offs).join() {
             transform.translate_y(1.0 * elapsed);
 
             if transform.translation().y > 4.0 { // 4 secondes
-                let msg = Message::NextLevel;
-                debug!("New message: {:?}", msg);
-                message_channel.single_write(msg);
-
+                debug!("Next level.");
+                level.finished = true;
             }
         }
     }

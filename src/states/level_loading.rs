@@ -77,6 +77,14 @@ impl<'a, 'b> SimpleState<'a, 'b> for LevelLoadingState {
                 Trans::None
             }
             LoadingState::NeedToLoadLevel => {
+                {
+                    let mut resource = data.world.write_resource::<LevelResource>();
+                    let idx = resource.current_level.expect("current_level is None!");
+                    if idx >= resource.levels.len() {
+                        resource.current_level = Some(0);
+                    }
+                }
+
                 self.load_level(data.world);
                 self.loading_state = LoadingState::LevelLoaded;
                 Trans::None
@@ -112,7 +120,9 @@ impl LevelLoadingState {
 
         let level = {
             let resource = world.read_resource::<LevelResource>();
-            let idx = resource.current_level.expect("load_level: current_level is None!");
+            let mut idx = resource.current_level.expect("load_level: current_level is None!");
+            if resource.finished { idx += 1 }
+            idx %= resource.levels.len();
             let level = resource.levels[idx].clone();
             info!("=> #{}: {}", idx, level.name);
             level
@@ -125,6 +135,8 @@ impl LevelLoadingState {
         for hum in &level.hums.list {
             create_hum(world, &hum);
         }
+
+        world.write_resource::<LevelResource>().finished = false;
 
         info!("Level loaded.");
     }

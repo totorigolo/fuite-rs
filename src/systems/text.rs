@@ -77,14 +77,7 @@ impl<'s> System<'s> for Text {
                         level.name
                     };
                     info!("Changing level name to: {}.", name);
-
-                    if let Some(name_display) = ui_text
-                        .get_mut(self.name_display.expect("Name UI text is None.")) {
-                        name_display.text = name;
-                        self.name_display_time_left = Some(3.0);
-                    } else {
-                        error!("Failed to change the level name!");
-                    }
+                    self.write_name(&mut ui_text, name);
                 }
                 Message::DeadGoodBot | Message::DeadBadBot => {
                     let name = if *message == Message::DeadGoodBot {"A nice Hum"} else { "A bad Hum" };
@@ -106,7 +99,8 @@ impl<'s> System<'s> for Text {
                     self.write_rocket_health(&mut ui_text, format!("Health: {}/{}", health, initial));
                 }
                 Message::RocketDestroyed => {
-                    self.write_comment(&mut ui_text, "The Rocket is dead!".into());
+                    self.write_name(&mut ui_text, "The Rocket is dead!".into());
+                    self.write_comment(&mut ui_text, "Press R".into());
                     self.write_rocket_passengers(&mut ui_text, "Passengers: DEAD".into());
                     self.write_rocket_health(&mut ui_text, "Health: KO".into());
                 }
@@ -143,6 +137,15 @@ impl<'s> System<'s> for Text {
 }
 
 impl Text {
+    fn write_name(&mut self, ui_text: &mut WriteStorage<UiText>, text: String) {
+        if let Some(name_display) = ui_text
+            .get_mut(self.name_display.expect("Name UI text is None.")) {
+            name_display.text = text;
+            self.name_display_time_left = Some(3.0);
+        } else {
+            error!("Failed to change the level name!");
+        }
+    }
     fn write_comment(&mut self, ui_text: &mut WriteStorage<UiText>, text: String) {
         if let Some(comment_display) = ui_text
             .get_mut(self.comment_display.expect("Comment UI text is None.")) {

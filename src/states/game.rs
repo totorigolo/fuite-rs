@@ -19,6 +19,7 @@ use crate::{
     resources::{
         Message,
         MessageChannel,
+        LevelResource,
     },
 };
 
@@ -45,7 +46,6 @@ impl<'a, 'b> SimpleState<'a, 'b> for GameState {
         world.write_resource::<MessageChannel>()
             .single_write(Message::LevelStarted);
 
-//        hide_cursor(world);
         info!("Game state initialization success!");
     }
 
@@ -69,6 +69,14 @@ impl<'a, 'b> SimpleState<'a, 'b> for GameState {
                 );
                 Trans::None
             }
+        }
+    }
+
+    fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans<'a, 'b> {
+        if data.world.read_resource::<LevelResource>().finished.clone() {
+            Trans::Pop
+        } else {
+            Trans::None
         }
     }
 }

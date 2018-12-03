@@ -7,6 +7,7 @@ use crate::{
 pub struct LevelResource {
     pub current_level: Option<usize>,
     pub levels: Vec<LevelConfig>,
+    pub finished: bool
 }
 
 impl Default for LevelResource {
@@ -14,6 +15,7 @@ impl Default for LevelResource {
         Self {
             current_level: None,
             levels: vec![],
+            finished: false,
         }
     }
 }

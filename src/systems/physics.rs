@@ -44,8 +44,9 @@ impl<'s> System<'s> for Physics {
     ): Self::SystemData) {
         let elapsed: f32 = time.delta_seconds();
 
-        if level.current_level.is_none() { return; };
-        let level = &level.levels[level.current_level.unwrap()];
+        let idx = if let Some(idx) = level.current_level { idx } else { return; };
+        if idx >= level.levels.len() { return; }
+        let level = &level.levels[idx];
         let gravity = level.gravity;
 
         // Apply forces

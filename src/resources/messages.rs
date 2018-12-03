@@ -19,7 +19,6 @@ pub enum Message {
     RocketFullEnough(i32, i32), // (f32: rocket passengers, min_capacity)
     RocketDamaged(f32, f32), // (f32: rocket health, initial)
     RocketDestroyed,
-    NextLevel,
 
     // Player input
     MouseLeftClick(Vector3<f32>)
