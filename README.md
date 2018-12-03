@@ -9,7 +9,11 @@ Sacrifices must be made.
 *I didn't spent much time on the README yet...*
 
 ## Screenshots
-TODO, poke me if I forgot :D
+
+![Little house](screenshots/nice-and-easy.png "Hi there!")
+
+![Level 2](screenshots/hard-core.png "Sacrifices must be made")
+
 
 
 ## How to run the game?
