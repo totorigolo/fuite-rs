@@ -98,7 +98,7 @@ impl<'s> System<'s> for BotsActionExecutor {
 
                     // Nearby enemy => attack
                     if enemy && dist <= ATTACKING_MIN_DIST {
-                        other_health.0 -= 20.0 * elapsed;
+                        other_health.0 -= 40.0 * elapsed;
                         other_force.0.x += self.kick_x_d.sample(&mut rand::thread_rng());
                         other_force.0.y += self.kick_y_d.sample(&mut rand::thread_rng());
 
