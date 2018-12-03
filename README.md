@@ -22,6 +22,7 @@ Sacrifices must be made.
 You can download a bundled version of the game on
 [GitHub](https://github.com/totorigolo/fuite-rs/releases).
 
+**Note**: Doesn't seem to work on Wayland, use X instead.
 
 ## How to build the game?
  - Install Rust ([rustup](https://rustup.rs/) is the easy way).
