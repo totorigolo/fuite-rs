@@ -3,7 +3,7 @@
   void_color: ( r: 0.1, g: 0.4, b: 0.9, a: 1.0 ),
   // pixels_per_meter: 200,
   levels: (
-    start_level: 0,
+    start_level: 1,
     levels: [
       ( // Level 1
         name: "Oh, a Rocket?",
@@ -36,6 +36,51 @@
         name: "Use your mouse",
         comment: "Or R to restart",
         take_off: "Some Hums can miss the rocket!",
+        gravity: [ 0.0, -10.0 ],
+        rocket: (
+          position: [ 4.0, 0.0 ],
+          color: ( r: 0.67, g: 0.91, b: 0.87, a: 1.0 ),
+          min_passengers: 3,
+          health: 300,
+          width: 1.0, height: 4.0, cap: 0.4
+        ),
+        hums: ( list: [
+          ( position: [ 0.0, 0.0 ],
+            health: 100.0, is_bad: false, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.51, g: 0.71, b: 0.96, a: 1.0 ),
+            shape: ( height: 0.41, top: 0.20, base: 0.30, border: 0.1 )
+          ),
+          ( position: [ 1.0, 0.0 ],
+            health: 100.0, is_bad: false, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
+            shape: ( height: 0.42, top: 0.30, base: 0.25, border: 0.1 )
+          ),
+          ( position: [ -1.4, 0.0 ],
+            health: 100.0, is_bad: false, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.38, g: 0.4, b: 0.91, a: 1.0 ),
+            shape: ( height: 0.38, top: 0.20, base: 0.30, border: 0.1 )
+          ),
+          ( position: [ -2.4, 0.0 ],
+            health: 100.0, is_bad: false, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.2, g: 0.45, b: 0.89, a: 1.0 ),
+            shape: ( height: 0.27, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+        ]),
+        platforms: ( list: [
+          ( aabb: ( top: 0.0, bottom: -1000, left: -20.0, right: 20.0 ),
+            color: ( r: 0.8, g: 0.2, b: 0.1, a: 1.0 ),
+          ),
+        ]),
+      ), // End of Level 2
+
+      ( // Level 2
+        name: "Who are they?",
+        comment: "Run!",
+        take_off: "We were lucky again!",
         gravity: [ 0.0, -10.0 ],
         rocket: (
           position: [ 4.0, 0.0 ],

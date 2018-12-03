@@ -80,6 +80,9 @@ impl<'s> System<'s> for Text {
                     self.write_name(&mut ui_text, name);
                     info!("Changing level comment to: {}.", comment);
                     self.write_comment(&mut ui_text, comment);
+
+                    self.write_rocket_passengers(&mut ui_text, "Passengers: 0/?".to_string());
+                    self.write_rocket_health(&mut ui_text, "Health: N/A".to_string());
                 }
                 Message::DeadGoodBot | Message::DeadBadBot => {
                     let name = if *message == Message::DeadGoodBot {"A nice Hum"} else { "A bad Hum" };
