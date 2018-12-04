@@ -135,6 +135,122 @@
         ]),
       ), // End of Level 3
 
+
+      ( // Level 3.5
+        name: "Red Hums are dumb",
+        comment: "Try to fool them",
+        take_off: "Heehehee too easy",
+        gravity: [ 0.0, -10.0 ],
+        rocket: (
+          position: [ 4.0, 0.0 ],
+          color: ( r: 0.67, g: 0.91, b: 0.87, a: 1.0 ),
+          min_passengers: 3,
+          health: 300,
+          width: 1.0, height: 4.0, cap: 0.4
+        ),
+        hums: ( list: [
+          ( position: [ -1.5, 4.5 ],
+            health: 100.0, is_bad: false, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.751, g: 0.91, b: 0.76, a: 1.0 ),
+            shape: ( height: 0.40, top: 0.20, base: 0.30, border: 0.1 )
+          ),
+          ( position: [ -1.2, 4.5 ],
+            health: 100.0, is_bad: false, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
+            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ -2.7, 4.5 ],
+            health: 100.0, is_bad: false, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
+            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ -2.0, 4.5 ],
+            health: 100.0, is_bad: false, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.3, g: 0.4, b: 0.99, a: 1.0 ),
+            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+
+          ( position: [ -2.7, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.93, g: 0.1, b: 0.2, a: 1.0 ),
+            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ -3.8, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.97, g: 0.23, b: 0.15, a: 1.0 ),
+            shape: ( height: 0.42, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ -2.6, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.75, g: 0.3, b: 0.1, a: 1.0 ),
+            shape: ( height: 0.32, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ -1.2, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.94, g: 0.32, b: 0.22, a: 1.0 ),
+            shape: ( height: 0.43, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ 1.8, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.8, g: 0.2, b: 0.3, a: 1.0 ),
+            shape: ( height: 0.41, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ 0.4, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.79, g: 0.1, b: 0.1, a: 1.0 ),
+            shape: ( height: 0.42, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ 1.0, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.98, g: 0.18, b: 0.24, a: 1.0 ),
+            shape: ( height: 0.38, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ 0.0, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.87, g: 0.21, b: 0.11, a: 1.0 ),
+            shape: ( height: 0.44, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ 0.5, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.79, g: 0.1, b: 0.1, a: 1.0 ),
+            shape: ( height: 0.42, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ 1.2, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.90, g: 0.28, b: 0.2, a: 1.0 ),
+            shape: ( height: 0.37, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+          ( position: [ 0.95, 0.0 ],
+            health: 100.0, is_bad: true, action: None,
+            mass: ( 1.0 ),
+            color: ( r: 0.92, g: 0.24, b: 0.1, a: 1.0 ),
+            shape: ( height: 0.36, top: 0.30, base: 0.20, border: 0.1 )
+          ),
+        ]),
+        platforms: ( list: [
+          ( aabb: ( top: 0.0, bottom: -1000, left: -20.0, right: 20.0 ),
+            color: ( r: 0.8, g: 0.2, b: 0.1, a: 1.0 ),
+          ),
+          ( aabb: ( top: 4.5, bottom: 4.2, left: -3.2, right: -1.0 ),
+            color: ( r: 0.24, g: 0.2, b: 0.95, a: 1.0 ),
+          ),
+        ]),
+      ), // End of Level 3
+
       ( // Level 4
         name: "OMG!?",
         comment: "Run?",
@@ -246,7 +362,7 @@
         rocket: (
           position: [ 5.0, 0.0 ],
           color: ( r: 0.67, g: 0.91, b: 0.87, a: 1.0 ),
-          min_passengers: 12,
+          min_passengers: 8,
           health: 300,
           width: 1.0, height: 4.0, cap: 0.4
         ),
@@ -323,19 +439,19 @@
             color: ( r: 0.32, g: 0.24, b: 0.93, a: 1.0 ),
             shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
-          ( position: [ -4.7, 3.5 ],
+          ( position: [ -4.7, 0.0 ],
             health: 100.0, is_bad: false, action: None,
             mass: ( 1.0 ),
             color: ( r: 0.37, g: 0.27, b: 0.84, a: 1.0 ),
             shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
-          ( position: [ -4.6, 3.5 ],
+          ( position: [ -4.6, 0.0 ],
             health: 100.0, is_bad: false, action: None,
             mass: ( 1.0 ),
             color: ( r: 0.22, g: 0.24, b: 0.97, a: 1.0 ),
             shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
-          ( position: [ -5.1, 3.5 ],
+          ( position: [ -5.1, 0.0 ],
             health: 100.0, is_bad: false, action: None,
             mass: ( 1.0 ),
             color: ( r: 0.37, g: 0.24, b: 0.97, a: 1.0 ),
@@ -352,12 +468,6 @@
             health: 100.0, is_bad: true, action: None,
             mass: ( 1.0 ),
             color: ( r: 0.91, g: 0.2, b: 0.15, a: 1.0 ),
-            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
-          ),
-          ( position: [ -2.7, 3.5 ],
-            health: 100.0, is_bad: true, action: None,
-            mass: ( 1.0 ),
-            color: ( r: 0.93, g: 0.1, b: 0.2, a: 1.0 ),
             shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
           ( position: [ -1.2, 3.5 ],
@@ -382,12 +492,6 @@
             health: 100.0, is_bad: true, action: None,
             mass: ( 1.0 ),
             color: ( r: 0.93, g: 0.15, b: 0.2, a: 1.0 ),
-            shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
-          ),
-          ( position: [ -2.5, 3.5 ],
-            health: 100.0, is_bad: true, action: None,
-            mass: ( 1.0 ),
-            color: ( r: 0.91, g: 0.2, b: 0.1, a: 1.0 ),
             shape: ( height: 0.40, top: 0.30, base: 0.20, border: 0.1 )
           ),
         ]),

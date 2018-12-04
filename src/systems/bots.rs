@@ -60,17 +60,18 @@ impl<'s> System<'s> for BotsActionExecutor {
         let elapsed = time.delta_seconds();
 
         // Moves related to actions
-        for (action, force) in (&actions, &mut forces).join() {
+        for (entity, action, force) in (&entities, &actions, &mut forces).join() {
+            let bad_modifier = if bads.get(entity).is_some() { 1.7 } else { 1.0 };
             match action {
                 CurrentAction::None | CurrentAction::Sleeping => {}
                 CurrentAction::GoingLeft => {
                     force.0.x -= 2.0;
                 }
                 CurrentAction::GoingRight => {
-                    force.0.x += 2.0;
+                    force.0.x += 2.0 * bad_modifier;
                 }
                 CurrentAction::Attacking => {
-                    force.0.x /= 1.5;
+                    force.0.x /= 1.5 * bad_modifier;
                 }
             }
         }
@@ -98,11 +99,11 @@ impl<'s> System<'s> for BotsActionExecutor {
 
                     // Nearby enemy => attack
                     if enemy && dist <= ATTACKING_MIN_DIST {
-                        other_health.0 -= 40.0 * elapsed;
+                        other_health.0 -= 90.0 * elapsed;
                         other_force.0.x += self.kick_x_d.sample(&mut rand::thread_rng());
                         other_force.0.y += self.kick_y_d.sample(&mut rand::thread_rng());
 
-//                        debug!("{} => {} ;; health={}", entity.id(), other_entity.id(), other_health.0);
+                        debug!("{} => {} ;; health={}", entity.id(), other_entity.id(), other_health.0);
 
                         attacked = true;
                         break; // One at a time
