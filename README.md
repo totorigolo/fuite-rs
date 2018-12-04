@@ -6,9 +6,16 @@ A game where you have to escape... but will everybody make it?
 Sacrifices must be made.
 
 
-*EDIT: Ah, no sound... Sorry :/*
+**Controls**: Click on Hums to control them:
+ - Left click: go to your left.
+ - Right right: go to your other left.
 
-*I didn't spent much time on the README yet...*
+For players stuck with a touchpad:
+ - Click + Space = right click.
+
+
+*No sound... Sorry :/*
+
 
 ## Screenshots
 

@@ -66,10 +66,10 @@ impl<'s> System<'s> for PlayerInput {
                                     position, t, c,
                                     &*screen_dim);
 
-                                if action.as_ref() == "left_click".to_string() {
-                                    Some(Message::MouseLeftClick(position))
-                                } else {
+                                if self.currently_pressed.contains("right") || action.as_ref() != "left_click".to_string() {
                                     Some(Message::MouseRightClick(position))
+                                } else {
+                                    Some(Message::MouseLeftClick(position))
                                 }
                             } else {
                                 warn!("Mouse click ignored because no camera found.");
