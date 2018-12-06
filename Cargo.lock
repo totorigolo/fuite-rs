@@ -1044,7 +1044,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "fuite"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "amethyst 0.9.0 (git+https://github.com/amethyst/amethyst.git)",
  "fern 0.5.7 (registry+https://github.com/rust-lang/crates.io-index)",

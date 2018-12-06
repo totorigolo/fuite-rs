@@ -6,11 +6,13 @@ A game where you have to escape... but will everybody make it?
 Sacrifices must be made.
 
 
-**Controls**: Click on Hums to control them:
- - Left click: go to your left.
- - Right right: go to your other left.
+**Controls**:
+ - Click on Hums to control them:
+   - Left click: go to your left.
+   - Right right: go to your other left.
+ - R: restart the current level.
 
-For players stuck with a touchpad:
+For players stuck with a touch-pad:
  - Click + Space = right click.
 
 
