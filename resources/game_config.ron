@@ -34,7 +34,7 @@
 
       ( // Level 2
         name: "Use your mouse",
-        comment: "Or R to restart",
+        comment: "LMB, RMB or R to restart",
         take_off: "Some Hums can miss the rocket!",
         gravity: [ 0.0, -10.0 ],
         rocket: (
@@ -139,7 +139,7 @@
       ( // Level 3.5
         name: "Red Hums are dumb",
         comment: "Try to fool them",
-        take_off: "Heehehee too easy",
+        take_off: "Heeheehee too easy",
         gravity: [ 0.0, -10.0 ],
         rocket: (
           position: [ 4.0, 0.0 ],
