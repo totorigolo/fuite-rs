@@ -30,7 +30,7 @@ pub struct StartingState {
     game_prefab: Option<Handle<Prefab<GamePrefabData>>>,
 }
 
-impl<'a, 'b> SimpleState<'a, 'b> for StartingState {
+impl SimpleState for StartingState {
     fn on_start(&mut self, data: StateData<GameData>) {
         info!("Starting...");
 
@@ -49,7 +49,7 @@ impl<'a, 'b> SimpleState<'a, 'b> for StartingState {
         }));
     }
 
-    fn update(&mut self, _: &mut StateData<GameData>) -> SimpleTrans<'a, 'b> {
+    fn update(&mut self, _: &mut StateData<GameData>) -> SimpleTrans {
         match &self.load_complete {
             false => {
                 match &self.load_progress.complete() {
@@ -74,3 +74,4 @@ impl<'a, 'b> SimpleState<'a, 'b> for StartingState {
         }
     }
 }
+

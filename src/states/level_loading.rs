@@ -58,14 +58,14 @@ impl LevelLoadingState {
     }
 }
 
-impl<'a, 'b> SimpleState<'a, 'b> for LevelLoadingState {
+impl SimpleState for LevelLoadingState {
     fn on_resume(&mut self, data: StateData<GameData>) {
         self.show_loading(data.world);
         self.unload_level(data.world);
         self.loading_state = LoadingState::NeedToLoadLevel;
     }
 
-    fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans<'a, 'b> {
+    fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans {
         match self.loading_state.clone() {
             LoadingState::NeedToLoadLevels => {
                 self.load_levels(data.world);

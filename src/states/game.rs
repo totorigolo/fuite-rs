@@ -36,7 +36,7 @@ impl GameState {
     }
 }
 
-impl<'a, 'b> SimpleState<'a, 'b> for GameState {
+impl SimpleState for GameState {
     fn on_start(&mut self, data: StateData<GameData>) {
         info!("Game state starting...");
 
@@ -49,7 +49,7 @@ impl<'a, 'b> SimpleState<'a, 'b> for GameState {
         info!("Game state initialization success!");
     }
 
-    fn handle_event(&mut self, _: StateData<GameData>, event: StateEvent) -> SimpleTrans<'a, 'b> {
+    fn handle_event(&mut self, _: StateData<GameData>, event: StateEvent) -> SimpleTrans {
         match &event {
             StateEvent::Window(event) => {
                 if is_close_requested(&event) || is_key_down(&event, VirtualKeyCode::Escape) {
@@ -72,7 +72,7 @@ impl<'a, 'b> SimpleState<'a, 'b> for GameState {
         }
     }
 
-    fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans<'a, 'b> {
+    fn update(&mut self, data: &mut StateData<GameData>) -> SimpleTrans {
         if data.world.read_resource::<LevelResource>().finished.clone() {
             Trans::Pop
         } else {
