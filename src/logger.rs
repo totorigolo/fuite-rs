@@ -1,14 +1,26 @@
 use fern;
 use log::{LevelFilter, debug};
-use amethyst::{LoggerConfig, StdoutLog};
+use amethyst::{
+    LoggerConfig, StdoutLog,
+};
+use std::{env, str::FromStr};
+
 
 /// Hides the "Created buffer" annoying message
 /// Shamefully copy-pasted from Amethyst code.
 // TODO: Post an Issue and remove this
 pub fn start_custom_logger(config: LoggerConfig) {
+    let mut config = config.clone();
 //    if config.allow_env_override {
 //        env_var_override(&mut config);
 //    }
+
+    config.level_filter = LevelFilter::Warn;
+    if let Ok(var) = env::var("AMETHYST_LOG_LEVEL_FILTER") {
+        if let Ok(lf) = LevelFilter::from_str(&var) {
+            config.level_filter = lf;
+        }
+    }
 
     let mut dispatch =
         fern::Dispatch::new()
