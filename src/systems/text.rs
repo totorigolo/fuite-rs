@@ -115,6 +115,12 @@ impl<'s> System<'s> for Text {
                     self.write_rocket_passengers(&mut ui_text, "Passengers: DEAD".into());
                     self.write_rocket_health(&mut ui_text, "Health: KO".into());
                 }
+                Message::AllGoodDead => {
+                    self.write_name(&mut ui_text, "Why would you need a Rocket?".into());
+                    self.write_comment(&mut ui_text, "Press R".into());
+//                    self.write_rocket_passengers(&mut ui_text, "Passengers: DEAD".into());
+//                    self.write_rocket_health(&mut ui_text, "Health: KO".into());
+                }
                 _ => {}
             }
         }

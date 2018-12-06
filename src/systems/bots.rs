@@ -175,6 +175,7 @@ impl<'s> System<'s> for BotUndertaker {
         WriteStorage<'s, Dead>,
         WriteStorage<'s, Bad>,
         WriteStorage<'s, Rocket>,
+        ReadStorage<'s, RocketTakeOff>,
         Write<'s, MessageChannel>
     );
 
@@ -182,7 +183,8 @@ impl<'s> System<'s> for BotUndertaker {
         Self::SystemData::setup(res);
     }
 
-    fn run(&mut self, (entities, transforms, mut healths, mut actions, mut deads, bads, rockets, mut message_channel): Self::SystemData) {
+    fn run(&mut self, (entities, transforms, mut healths, mut actions,
+        mut deads, bads, rockets, take_offs, mut message_channel): Self::SystemData) {
 
         // Kill entities with negative health
         let mut deads_entities = vec![];
@@ -207,9 +209,23 @@ impl<'s> System<'s> for BotUndertaker {
         };
 
         // Remove far enough entities
+        let mut some_deads = false;
         for (entity, transform, _) in (&entities, &transforms, &deads).join() {
+            some_deads = true;
             if transform.translation().norm() > HEAVEN_DIST {
                 entities.delete(entity).expect("Failed to delete the dead Entity.");
+            }
+        }
+
+        // Checks if all are dead
+        if some_deads {
+            // OMG my code is scary
+            let take_off = (&take_offs).join().next().is_some();
+            let good_alive_left = (&entities, &healths, !&bads, !&deads, !&rockets).join().next().is_some();
+            if !take_off && !good_alive_left {
+                let msg = Message::AllGoodDead;
+                debug!("New message: {:?}", msg);
+                message_channel.single_write(msg);
             }
         }
     }

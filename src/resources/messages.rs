@@ -20,6 +20,7 @@ pub enum Message {
     #[allow(dead_code)]
     RocketDamaged(f32, f32), // (f32: rocket health, initial)
     RocketDestroyed,
+    AllGoodDead,
 
     // Player input
     MouseLeftClick(Vector3<f32>),
