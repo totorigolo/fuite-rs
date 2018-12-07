@@ -5,6 +5,7 @@ A game where you have to escape... but will everybody make it?
 [Ludum Dare 43](https://ldjam.com/events/ludum-dare/43):
 Sacrifices must be made.
 
+Link to the game on Ludum Dare website: https://ldjam.com/events/ludum-dare/43/fuite-escape
 
 **Controls**:
  - Click on Hums to control them:
