@@ -34,12 +34,14 @@ You can download a bundled version of the game on
 
 **Note**: Doesn't seem to work on Wayland, use X instead.
 
+**Note**: Rust 1.36.0+ introduce a ["acceptable breakage"](https://github.com/rust-lang/rust/issues/60958), so the game won't compile with newer versions of the compiler. Amethyst fixed the issue, but in 0.11, and I don't want to migrate to Rendy.
+
 ## How to build the game?
- - Install Rust ([rustup](https://rustup.rs/) is the easy way).
- - You need the Nightly version: `rustup install nightly`.
+ - Install _rustup_ ([rustup](https://rustup.rs/) is the easy way):
+ - You need the Rust **1.35.0** version: `rustup install 1.35.0`.
  - Go check the [Amethyst README](https://github.com/amethyst/amethyst).
  - `git clone https://github.com/totorigolo/fuite.git`
- - `cargo +nightly run`
+ - `cargo +1.35.0 run --release`
 
 
 ## License
